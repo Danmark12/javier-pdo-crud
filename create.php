@@ -43,14 +43,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
  
         if($stmt = $pdo->prepare($sql)){
             // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":name", $param_name);
-            $stmt->bindParam(":address", $param_address);
-            $stmt->bindParam(":salary", $param_salary);
+            // $stmt->bindParam(":name", $param_name);
+            // $stmt->bindParam(":address", $param_address);
+            // $stmt->bindParam(":salary", $param_salary);
+            $stmt->bindParam(":product_id", $id );
+            $stmt->bindParam(":product_thumbnail_links", $links );
+            $stmt->bindParam(":product_name", $name);
+            $stmt->bindParam(":product_description", $description);
+            $stmt->bindParam(":product_retail_price", $price);
+            $stmt->bindParam(":product_date_added", $date);
+            $stmt->bindParam(":product_updated_date", $update_date);
             
             // Set parameters
-            $param_name = $name;
-            $param_address = $address;
-            $param_salary = $salary;
+            // $param_name = $name;
+            // $param_address = $address;
+            // $param_salary = $salary;
+
+            $product_id = $id;
+            $product_thumbnail_links = $links;
+            $product_name = $name;
+            $product_description	 = $description;
+            $product_retail_price = $price;
+            $product_date_added = $date;
+            $product_updated_date = $update_date;
             
             // Attempt to execute the prepared statement
             if($stmt->execute()){
