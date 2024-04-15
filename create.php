@@ -6,32 +6,32 @@ require_once "config.php";
 // $name = $address = $salary = "";
 // $name_err = $address_err = $salary_err = "";
 $product_id = $product_thumbnail_links = $product_name = $product_description = $product_retail_price = $product_date_added = $product_updated_date = "";
-$Pname = $Pdescription = $Pprice = "";
+$Pname_err = $Pdescription_err = $Pprice_err = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate name
-    $input_product_name = trim($_POST["name"]);
+    $input_product_name = trim($_POST["product_name"]);
     if(empty($input_product_name)){
-        $Pname = "Please enter a product name.";
+        $Pname_err = "Please enter a product name.";
     } else {
         $product_name = $input_product_name;
     }
     
     // Validate product description
-    $input_product_description = trim($_POST["address"]);
+    $input_product_description = trim($_POST["product_description"]);
     if(empty($input_product_description)){
-        $Pdescription = "Please enter a product description.";
+        $Pdescription_err = "Please enter a product description.";
     } else {
         $product_description = $input_product_description;
     }
     
     // Validate product retail price
-    $input_product_retail_price = trim($_POST["salary"]);
+    $input_product_retail_price = trim($_POST["product_retail_price"]);
     if(empty($input_product_retail_price)){
-        $Pprice = "Please enter the product retail price.";     
+        $Pprice_err = "Please enter the product retail price.";     
     } elseif(!ctype_digit($input_product_retail_price)){
-        $Pprice = "Please enter a valid product retail price.";
+        $Pprice_err = "Please enter a valid product retail price.";
     } else{
         $product_retail_price = $input_product_retail_price;
     }
@@ -40,20 +40,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before inserting in database
     if(empty($Pname) && empty($Pdescription) && empty($Pprice)){
         // Prepare an insert statement
-        $sql = "INSERT INTO employees (name, address, salary) VALUES (:name, :address, :salary)";
+        $sql = "INSERT INTO products (product_name, product_description, product_retail_price) VALUES (:product_name, :product_description, :product_retail_price)";
  
         if($stmt = $pdo->prepare($sql)){
             // Bind variables to the prepared statement as parameters
             // $stmt->bindParam(":name", $param_name);
             // $stmt->bindParam(":address", $param_address);
             // $stmt->bindParam(":salary", $param_salary);
-            $stmt->bindParam(":product_id", $id );
-            $stmt->bindParam(":product_thumbnail_links", $links );
-            $stmt->bindParam(":product_name", $name);
-            $stmt->bindParam(":product_description", $description);
-            $stmt->bindParam(":product_retail_price", $price);
-            $stmt->bindParam(":product_date_added", $date);
-            $stmt->bindParam(":product_updated_date", $update_date);
+            $stmt->bindParam(":product_id", $product_id);
+            $stmt->bindParam(":product_thumbnail_links", $product_thumbnail_links);
+            $stmt->bindParam(":product_name", $product_name);
+            $stmt->bindParam(":product_description", $product_description);
+            $stmt->bindParam(":product_retail_price", $product_retail_price);
+            $stmt->bindParam(":product_date_added", $product_date_added);
+            $stmt->bindParam(":product_updated_date", $product_updated_dat);
             
             // Set parameters
             // $param_name = $name;
@@ -118,26 +118,26 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
                         <div class="form-group">
                             <label>Product Name</label>
-                            <input type="text" name="product_name" class="form-control <?php echo (!empty($Pname)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_name; ?>">
+                            <input type="text"name="product_name" class="form-control <?php echo (!empty($Pname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_name; ?>">
                             <span class="invalid-feedback"><?php echo $Pname;?></span>
                         </div>
                         <div class="form-group">
                             <label>Product Description</label>
-                            <textarea name="product_description" class="form-control <?php echo (!empty($Pdescription)) ? 'is-invalid' : ''; ?>"><?php echo $product_description; ?></textarea>
+                            <textarea name="product_description" class="form-control <?php echo (!empty($Pdescription_err)) ? 'is-invalid' : ''; ?>"><?php echo $product_description; ?></textarea>
                             <span class="invalid-feedback"><?php echo $address_err;?></span>
                         </div>
                         <div class="form-group">
                             <label>Product Retail Price</label>
-                            <input type="text" name="product_retail_price" class="form-control <?php echo (!empty($Pprice)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_retail_price; ?>">
+                            <input type="text" product_name="product_retail_price" class="form-control <?php echo (!empty($Pprice_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_retail_price; ?>">
                             <span class="invalid-feedback"><?php echo $salary_err;?></span>
                         </div>
                         <div class="form-group">
                             <label>Product Date Added</label>
-                            <input type="text" name="product_date_added" class="form-control" value="<?php echo $product_date_added; ?>">
+                            <input type="text" product_name="product_date_added" class="form-control" value="<?php echo $product_date_added; ?>">
                         </div>
                         <div class="form-group">
                             <label>Product Updated Date</label>
-                            <input type="text" name="product_updated_date" class="form-control" value="<?php echo $product_updated_date; ?>">
+                            <input type="text" product_name="product_updated_date" class="form-control" value="<?php echo $product_updated_date; ?>">
                         </div>
                         <input type="submit" class="btn btn-primary" value="Submit">
                         <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>
