@@ -47,36 +47,43 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // $stmt->bindParam(":name", $param_name);
             // $stmt->bindParam(":address", $param_address);
             // $stmt->bindParam(":salary", $param_salary);
-            $stmt->bindParam(":product_id", $product_id);
-            $stmt->bindParam(":product_thumbnail_links", $product_thumbnail_links);
-            $stmt->bindParam(":product_name", $product_name);
-            $stmt->bindParam(":product_description", $product_description);
-            $stmt->bindParam(":product_retail_price", $product_retail_price);
-            $stmt->bindParam(":product_date_added", $product_date_added);
-            $stmt->bindParam(":product_updated_date", $product_updated_dat);
-            
+            $stmt->bindParam(":product_id", $param_product_id);
+            $stmt->bindParam(":product_thumbnail_links", $param_product_thumbnail_links);
+            $stmt->bindParam(":product_name", $param_product_name);
+            $stmt->bindParam(":product_description", $param_product_description);
+            $stmt->bindParam(":product_retail_price", $param_product_retail_price);
+            $stmt->bindParam(":product_date_added", $param_product_date_added);
+            $stmt->bindParam(":product_updated_date", $param_product_updated_date);
             // Set parameters
             // $param_name = $name;
             // $param_address = $address;
             // $param_salary = $salary;
-
-            $product_id = $id;
-            $product_thumbnail_links = $links;
-            $product_name = $name;
-            $product_description	 = $description;
-            $product_retail_price = $price;
-            $product_date_added = $date;
-            $product_updated_date = $update_date;
+            
+            $param_product_id = $product_id;
+            $param_product_thumbnail_links = $product_thumbnail_links;
+            $param_product_name = $product_name;
+            $param_product_description = $product_description;
+            $param_product_retail_price = $product_retail_price;
+            $param_product_date_added = $product_date_added;
+            $param_product_updated_date = $product_updated_date;
             
             // Attempt to execute the prepared statement
-            if($stmt->execute()){
-                // Records created successfully. Redirect to landing page
-                header("location: index.php");
-                exit();
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
+        //     if($stmt->execute()){
+        //         // Records created successfully. Redirect to landing page
+        //         header("location: index.php");
+        //         exit();
+        //     } else{
+        //         echo "Oops! Something went wrong. Please try again later.";
+        //     }
+        // }
+        if($stmt->execute()){
+            // Records created successfully. Redirect to landing page
+            header("location: index.php");
+            exit();
+        } else{
+            echo "Oops! Something went wrong. Please try again later.";
         }
+    }
          
         // Close statement
         unset($stmt);
@@ -118,7 +125,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
                         <div class="form-group">
                             <label>Product Name</label>
-                            <input type="text"name="product_name" class="form-control <?php echo (!empty($Pname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_name; ?>">
+                            <input type="text" name="product_name" class="form-control <?php echo (!empty($Pname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_name; ?>">
                             <span class="invalid-feedback"><?php echo $Pname;?></span>
                         </div>
                         <div class="form-group">
@@ -128,16 +135,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
                         <div class="form-group">
                             <label>Product Retail Price</label>
-                            <input type="text" product_name="product_retail_price" class="form-control <?php echo (!empty($Pprice_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_retail_price; ?>">
+                            <input type="text" name="product_retail_price" class="form-control <?php echo (!empty($Pprice_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_retail_price; ?>">
                             <span class="invalid-feedback"><?php echo $salary_err;?></span>
                         </div>
                         <div class="form-group">
                             <label>Product Date Added</label>
-                            <input type="text" product_name="product_date_added" class="form-control" value="<?php echo $product_date_added; ?>">
+                            <input type="text" name="product_date_added" class="form-control" value="<?php echo $product_date_added; ?>">
                         </div>
                         <div class="form-group">
                             <label>Product Updated Date</label>
-                            <input type="text" product_name="product_updated_date" class="form-control" value="<?php echo $product_updated_date; ?>">
+                            <input type="text" name="product_updated_date" class="form-control" value="<?php echo $product_updated_date; ?>">
                         </div>
                         <input type="submit" class="btn btn-primary" value="Submit">
                         <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>
