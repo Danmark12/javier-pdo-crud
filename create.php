@@ -5,7 +5,7 @@ require_once "config.php";
 // Define variables and initialize with empty values
 // $name = $address = $salary = "";
 // $name_err = $address_err = $salary_err = "";
-$product_id = $product_thumbnail_links = $product_name = $product_description = $product_retail_price = $product_date_added = $product_updated_date = "";
+$product_id = $product_thumbnail_link = $product_name = $product_description = $product_retail_price = $product_date_added = $product_updated_date = "";
 $Pname_err = $Pdescription_err = $Pprice_err = "";
  
 // Processing form data when form is submitted
@@ -40,7 +40,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before inserting in database
     if(empty($Pname) && empty($Pdescription) && empty($Pprice)){
         // Prepare an insert statement
-        $sql = "INSERT INTO products (product_name, product_description, product_retail_price) VALUES (:product_name, :product_description, :product_retail_price)";
+        $sql = "INSERT INTO products (product_id, product_thumbnail_link, product_name, product_description, product_retail_price, product_date_added, product_updated_date) 
+        VALUES (:product_id, :product_thumbnail_link, :product_name, :product_description, :product_retail_price, :product_date_added, :product_updated_date)";
+
  
         if($stmt = $pdo->prepare($sql)){
             // Bind variables to the prepared statement as parameters
@@ -48,42 +50,39 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // $stmt->bindParam(":address", $param_address);
             // $stmt->bindParam(":salary", $param_salary);
             $stmt->bindParam(":product_id", $param_product_id);
-            $stmt->bindParam(":product_thumbnail_links", $param_product_thumbnail_links);
+            $stmt->bindParam(":product_thumbnail_link", $param_product_thumbnail_link);
             $stmt->bindParam(":product_name", $param_product_name);
             $stmt->bindParam(":product_description", $param_product_description);
             $stmt->bindParam(":product_retail_price", $param_product_retail_price);
             $stmt->bindParam(":product_date_added", $param_product_date_added);
             $stmt->bindParam(":product_updated_date", $param_product_updated_date);
+            
+            
             // Set parameters
             // $param_name = $name;
             // $param_address = $address;
             // $param_salary = $salary;
             
             $param_product_id = $product_id;
-            $param_product_thumbnail_links = $product_thumbnail_links;
+            $param_product_thumbnail_link = $product_thumbnail_link;
             $param_product_name = $product_name;
             $param_product_description = $product_description;
             $param_product_retail_price = $product_retail_price;
             $param_product_date_added = $product_date_added;
-            $param_product_updated_date = $product_updated_date;
+            $param_product_updated_date = $product_updated_date;            
+            
             
             // Attempt to execute the prepared statement
-        //     if($stmt->execute()){
-        //         // Records created successfully. Redirect to landing page
-        //         header("location: index.php");
-        //         exit();
-        //     } else{
-        //         echo "Oops! Something went wrong. Please try again later.";
-        //     }
-        // }
-        if($stmt->execute()){
-            // Records created successfully. Redirect to landing page
-            header("location: index.php");
-            exit();
-        } else{
-            echo "Oops! Something went wrong. Please try again later.";
+            if($stmt->execute()){
+                // Records created successfully. Redirect to landing page
+                header("location: index.php");
+                exit();
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
         }
-    }
+      
+    
          
         // Close statement
         unset($stmt);
@@ -120,23 +119,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <input type="text" name="product_id" class="form-control" value="<?php echo $product_id; ?>">
                         </div>
                         <div class="form-group">
-                            <label>Product Thumbnail Links</label>
-                            <input type="text" name="product_thumbnail_links" class="form-control" value="<?php echo $product_thumbnail_links; ?>">
+                            <label>Product Thumbnail Link</label>
+                            <input type="text" name="product_thumbnail_links" class="form-control" value="<?php echo $product_thumbnail_link; ?>">
                         </div>
                         <div class="form-group">
                             <label>Product Name</label>
                             <input type="text" name="product_name" class="form-control <?php echo (!empty($Pname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_name; ?>">
-                            <span class="invalid-feedback"><?php echo $Pname;?></span>
+                            <span class="invalid-feedback"><?php echo $Pname_err;?></span>
                         </div>
                         <div class="form-group">
                             <label>Product Description</label>
                             <textarea name="product_description" class="form-control <?php echo (!empty($Pdescription_err)) ? 'is-invalid' : ''; ?>"><?php echo $product_description; ?></textarea>
-                            <span class="invalid-feedback"><?php echo $address_err;?></span>
+                            <span class="invalid-feedback"><?php echo $Pdescription_err;?></span>
                         </div>
                         <div class="form-group">
                             <label>Product Retail Price</label>
                             <input type="text" name="product_retail_price" class="form-control <?php echo (!empty($Pprice_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_retail_price; ?>">
-                            <span class="invalid-feedback"><?php echo $salary_err;?></span>
+                            <span class="invalid-feedback"><?php echo $Pprice_err;?></span>
                         </div>
                         <div class="form-group">
                             <label>Product Date Added</label>
