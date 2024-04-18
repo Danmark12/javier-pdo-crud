@@ -90,21 +90,5 @@
             </div>        
         </div>
     </div>
-    <script>
-    $(document).ready(function(){
-        $.ajax({
-            url: "public_read.php",
-            method: "GET",
-            success: function(response) {
-                // Process the response here
-                console.log(response);
-            },
-            error: function(xhr, status, error) {
-                // Handle errors here
-                console.error(xhr.responseText);
-            }
-        });
-    });
-    </script>
 </body>
 </html>

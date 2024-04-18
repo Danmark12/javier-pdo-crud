@@ -6,36 +6,46 @@ require_once "../db/config.php";
 // $name = $address = $salary = "";
 // $name_err = $address_err = $salary_err = "";
 $product_id = $product_thumbnail_link = $product_name = $product_description = $product_retail_price = $product_date_added = $product_updated_date = "";
-$Pname_err = $Pdescription_err = $Pprice_err = "";
+$Pid_err = $Plink_err = $Pname_err = $Pdescription_err = $Pprice_err = $Pdate_err = $Pupdated_err = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 // validate id
     if (isset($_POST["product_id"])) {
-        $input_id = trim($_POST["product_id"]);
+        $input_product_id = trim($_POST["product_id"]);
         if (empty($input_product_id)) {
-            $id_err = "Please enter the id";
+            $Pid_err = "Please enter the id";
         } elseif (!ctype_digit($input_product_id)) {
-            $id_err = "Please enter a positive integer value.";
+            $Pid_err = "Please enter a positive integer value.";
         } else {
-            $id = $input_product_id;
+            $Pid = $input_product_id;
         }
     } else {
         $product_id_err = "ID is required";
     }
-
+    // link
+    if (isset($_POST["product_thumbnail_link"])) {
+        $input_product_thumbnail_link = trim($_POST["product_thumbnail_link"]);
+        if (empty($input_product_thumbnail_link)) {
+            $Plink_err = "Please enter a link.";
+        } elseif (!filter_var($input_product_thumbnail_link, FILTER_VALIDATE_URL)) {
+            $Plink_err = "Please enter a valid URL.";
+        } else {
+            $Plink = $input_product_thumbnail_link;
+        }
+    } else {
+        $Plink_err = "Link is required";
+    }
 
     // Validate name
     $input_product_name = trim($_POST["product_name"]);
     if(empty($input_product_name)){
         $Pname_err = "Please enter a product name.";
     } elseif (!preg_match("/^[a-zA-Z\s]+$/", $input_product_name)) {
-        $name_err = "Please enter a valid name.";
+        $Pname_err = "Please enter a valid name.";
     } else {
         $product_name = $input_product_name;
     }
-
-
     
     // Validate product description
     $input_product_description = trim($_POST["product_description"]);
@@ -44,7 +54,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } else {
         $product_description = $input_product_description;
     }
-    
     // Validate product retail price
     $input_product_retail_price = trim($_POST["product_retail_price"]);
     if(empty($input_product_retail_price)){
@@ -53,6 +62,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Pprice_err = "Please enter a valid product retail price.";
     } else{
         $product_retail_price = $input_product_retail_price;
+    }
+    // date added
+    if (isset($_POST["product_date_added"])) {
+        $input_product_date_added = trim($_POST["product_date_added"]);
+        if (empty($input_product_date_added)) {
+            $Pdate_err = "Please enter a date-added.";
+        } else {
+            $product_date_added = $input_product_date_added;
+        }
+    } else {
+        $Pdate_err = "Date added is required";
+    }
+
+    // updated
+    if (isset($_POST["product_updated_date"])) {
+        $input_product_updated_date = trim($_POST["product_updated_date"]);
+        if (empty($input_product_updated_date)) {
+            $Pupdated_err = "Please enter an updated date.";
+        } else {
+            $Pupdated = $input_product_updated_date;
+        }
+    } else {
+        $Pupdated_err = "Updated date is required";
     }
     
     // Check input errors before inserting in database
@@ -133,12 +165,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <p>Please fill this form and submit to add a product record to the database.</p>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <div class="form-group">
-                            <label>Product ID</label>
-                            <input type="text" name="product_id" class="form-control" value="<?php echo $product_id; ?>">
+                        <label>Product ID</label>
+                            <input type="text" name="product_id" class="form-control <?php echo (!empty($Pid_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_id; ?>">
+                            <span class="invalid-feedback"><?php echo $Pid_err; ?></span>
                         </div>
                         <div class="form-group">
+                    
                             <label>Product Thumbnail Link</label>
-                            <input type="text" name="product_thumbnail_links" class="form-control" value="<?php echo $product_thumbnail_link; ?>">
+                            <input type="text" name= "product_thumbnail_link" class="form-control <?php echo (!empty($Plink_err)) ? 'is-invalid' : ''; ?>" value="<?php echo  $product_thumbnail_link?>">
+                            <span class="invalid-feedback"><?php echo $Plink_err; ?></span>
                         </div>
                         <div class="form-group">
                             <label>Product Name</label>
@@ -157,14 +192,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
                         <div class="form-group">
                             <label>Product Date Added</label>
-                            <input type="text" name="product_date_added" class="form-control" value="<?php echo $product_date_added; ?>">
+                            <input type="date" name="product_date_added" class="form-control <?php echo (!empty($Pdate_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_date_added; ?>">
+                            <span class="invalid-feedback"><?php echo $Pdate_err; ?></span>
                         </div>
                         <div class="form-group">
                             <label>Product Updated Date</label>
-                            <input type="text" name="product_updated_date" class="form-control" value="<?php echo $product_updated_date; ?>">
+                            <input type="date" name="product_updated_date" class="form-control <?php echo (!empty($Pupdated_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_updated_date; ?>">
+                            <span class="invalid-feedback"><?php echo $Pupdated_err; ?></span>
                         </div>
                         <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="../index.php" class="btn btn-secondary ml-2">Cancel</a>
+                        <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>
                     </form>
                 </div>
             </div>        
