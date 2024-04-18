@@ -1,6 +1,6 @@
 <?php
 // Include config file
-require_once "config.php";
+require_once "db/config.php";
  
 // Define variables and initialize with empty values
 // $name = $address = $salary = "";
@@ -10,13 +10,32 @@ $Pname_err = $Pdescription_err = $Pprice_err = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+// validate id
+    if (isset($_POST["product_id"])) {
+        $input_id = trim($_POST["product_id"]);
+        if (empty($input_product_id)) {
+            $id_err = "Please enter the id";
+        } elseif (!ctype_digit($input_product_id)) {
+            $id_err = "Please enter a positive integer value.";
+        } else {
+            $id = $input_product_id;
+        }
+    } else {
+        $product_id_err = "ID is required";
+    }
+
+
     // Validate name
     $input_product_name = trim($_POST["product_name"]);
     if(empty($input_product_name)){
         $Pname_err = "Please enter a product name.";
+    } elseif (!preg_match("/^[a-zA-Z\s]+$/", $input_product_name)) {
+        $name_err = "Please enter a valid name.";
     } else {
         $product_name = $input_product_name;
     }
+
+
     
     // Validate product description
     $input_product_description = trim($_POST["product_description"]);
@@ -24,6 +43,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Pdescription_err = "Please enter a product description.";
     } else {
         $product_description = $input_product_description;
+    }
+    } else {
+        $description_err = "Description is required";
     }
     
     // Validate product retail price
@@ -35,7 +57,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } else{
         $product_retail_price = $input_product_retail_price;
     }
-    
     
     // Check input errors before inserting in database
     if(empty($Pname) && empty($Pdescription) && empty($Pprice)){
@@ -87,7 +108,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         // Close statement
         unset($stmt);
     }
-    
+ {
     // Close connection
     unset($pdo);
 }
