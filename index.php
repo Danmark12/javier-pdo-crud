@@ -5,8 +5,6 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="delete.php"></script>
-    <script src="update.php"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -45,11 +43,7 @@
                             echo '<table class="table table-bordered table-striped">';
                                 echo "<thead>";
                                     echo "<tr>";
-                                        // echo "<th>#</th>";
-                                        // echo "<th>Name</th>";
-                                        // echo "<th>Address</th>";
-                                        // echo "<th>Salary</th>";
-                                        // echo "<th>Action</th>";
+                                    
                                         echo "<th>product_id</th>";
                                         echo "<th>product_thumbnail_link </th>";
                                         echo "<th>product_name</th>";
@@ -63,24 +57,17 @@
                                 echo "<tbody>";
                                 while($row = $result->fetch()){
                                     echo "<tr>";
-                                        // echo "<td>" . $row['id'] . "</td>";
-                                        // echo "<td>" . $row['name'] . "</td>";
-                                        // echo "<td>" . $row['address'] . "</td>";
-                                        // echo "<td>" . $row['salary'] . "</td>";
-
+                                       
                                         echo "<td>" . $row['product_id'] . "</td>";
                                         echo "<td>" . $row['product_thumbnail_link'] . "</td>";
                                         echo "<td>" . $row['product_name'] . "</td>";
                                         echo "<td>" . $row['product_description'] . "</td>";
-
                                         echo "<td>" . $row['product_retail_price'] . "</td>";
                                         echo "<td>" . $row['product_date_added'] . "</td>";
                                         echo "<td>" . $row['product_updated_date'] . "</td>";
                                         echo "<td>";
                                             echo '<a href="read.php?product_id='. $row['product_id'] .'" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>';
-                                            // echo '<a href="update.php?product-id='. $row['product_id'] .'" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>';
                                             echo '<a href="update.php?product_id='. $row['product_id'] .'" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>';
-                                            // echo '<a href="delete.php?id='. $row['product_id'] .'" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash"></span></a>';
                                             echo '<a href="delete.php?product_id=' . $row['product_id'] . '" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash"></span></a>';
                                         echo "</td>";
                                     echo "</tr>";
@@ -103,5 +90,21 @@
             </div>        
         </div>
     </div>
+    <script>
+    $(document).ready(function(){
+        $.ajax({
+            url: "read.php",
+            method: "GET",
+            success: function(response) {
+                // Process the response here
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle errors here
+                console.error(xhr.responseText);
+            }
+        });
+    });
+    </script>
 </body>
 </html>
