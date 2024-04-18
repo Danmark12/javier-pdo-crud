@@ -2,7 +2,7 @@
 // Process delete operation after confirmation
 if(isset($_GET["product_id"]) && !empty($_GET["product_id"])){
     // Include config file
-    require_once "config.php";
+    require_once "../db/config.php";
     
     // Prepare a delete statement
     $sql = "DELETE FROM products WHERE product_id = :product_id";
@@ -18,7 +18,7 @@ if(isset($_GET["product_id"]) && !empty($_GET["product_id"])){
         try {
             if($stmt->execute()){
                 // Records deleted successfully. Redirect to landing page
-                header("location: index.php");
+                header("location: ../index.php");
                 exit();
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
@@ -36,7 +36,7 @@ if(isset($_GET["product_id"]) && !empty($_GET["product_id"])){
     unset($pdo);
 } else{
     // No product_id provided, redirect to error page
-    header("location: error.php");
+    header("location: public/error.php");
     exit();
 }
 ?>
