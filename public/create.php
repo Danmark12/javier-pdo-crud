@@ -1,6 +1,6 @@
 <?php
 // Include config file
-require_once "db/config.php";
+require_once "../db/config.php";
  
 // Define variables and initialize with empty values
 // $name = $address = $salary = "";
@@ -43,9 +43,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Pdescription_err = "Please enter a product description.";
     } else {
         $product_description = $input_product_description;
-    }
-    } else {
-        $description_err = "Description is required";
     }
     
     // Validate product retail price
@@ -96,7 +93,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Attempt to execute the prepared statement
             if($stmt->execute()){
                 // Records created successfully. Redirect to landing page
-                header("location: index.php");
+                header("location: ../index.php");
                 exit();
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
@@ -108,7 +105,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         // Close statement
         unset($stmt);
     }
- {
+ 
     // Close connection
     unset($pdo);
 }
@@ -167,7 +164,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <input type="text" name="product_updated_date" class="form-control" value="<?php echo $product_updated_date; ?>">
                         </div>
                         <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>
+                        <a href="../index.php" class="btn btn-secondary ml-2">Cancel</a>
                     </form>
                 </div>
             </div>        

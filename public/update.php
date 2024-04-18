@@ -1,6 +1,6 @@
 <?php
 // Include config file
-require_once "db/config.php";
+require_once "../db/config.php";
  
 // Define variables and initialize with empty values
 // $name = $address = $salary = "";
@@ -74,7 +74,7 @@ if(isset($_POST["product_id"]) && !empty($_POST["product_id"])){
             // Attempt to execute the prepared statement
             if($stmt->execute()){
                 // Records updated successfully. Redirect to landing page
-                header("location: index.php");
+                header("location: ../index.php");
                 exit();
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
@@ -201,7 +201,7 @@ if(isset($_POST["product_id"]) && !empty($_POST["product_id"])){
                         </div>
                         <input type="hidden" name="id" value="<?php echo $product_id; ?>"/>
                         <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>
+                        <a href="../index.php" class="btn btn-secondary ml-2">Cancel</a>
                     </form>
                 </div>
             </div>        
