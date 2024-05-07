@@ -36,7 +36,7 @@ if(isset($_GET["product_id"]) && !empty($_GET["product_id"])){
     unset($pdo);
 } else{
     // No product_id provided, redirect to error page
-    header("location: public/error.php");
+    header("location: ../public/error.php");
     exit();
 }
 ?>

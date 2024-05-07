@@ -7,7 +7,8 @@ $product_id = $product_thumbnail_link = $product_name = $product_description = $
 $Pname_err = $Pdescription_err = $Pprice_err = "";
 
 // Processing form data when form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {  
     // Get hidden input value
     $product_id = $_POST["product_id"];
     
@@ -195,8 +196,8 @@ echo "Oops! Something went wrong. Please try again later.";
                             <input type="date" name="product_updated_date" class="form-control <?php echo (!empty($Pupdated_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_updated_date; ?>">
                             <span class="invalid-feedback"><?php echo $Pupdated_err; ?></span>
                         </div>
-                        <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>
+                        <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+                        <a href="../index.php" class="btn btn-secondary ml-2">Cancel</a>
                     </form>
                 </div>
             </div>        
