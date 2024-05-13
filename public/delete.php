@@ -62,11 +62,11 @@ if(isset($_GET["product_id"]) && !empty($_GET["product_id"])){
                     <h2 class="mt-5 mb-3">Delete Record</h2>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <div class="alert alert-danger">
-                            <input type="hidden" name="product_id" value="<?php echo isset($_GET["product_id"]) ? $_GET["product_id"] : ''; ?>"/>
+                        <input type="hidden" name="product_id" value="<?php echo trim($_GET["product_id"]); ?>"/>
                             <p>Are you sure you want to delete this product record?</p>
                             <p>
-                                <input type="submit" value="Yes" class="btn btn-danger">
-                                <a href="index.php" class="btn btn-secondary ml-2">No</a>
+                            <input type="submit" value="Yes" class="btn btn-danger">
+                                <a href="../public/welcome.php" class="btn btn-secondary ml-2">No</a>
                             </p>
                         </div>
                     </form>
