@@ -91,7 +91,7 @@ unset($pdo);
       // Check existence of id parameter before processing further
       if(isset($_GET["product_id"]) && !empty(trim($_GET["product_id"]))){
         // Get URL parameter
-        $id =  trim($_GET["product_id"]);
+        $product_id =  trim($_GET["product_id"]);
         
         // Prepare a select statement
         $sql = "SELECT * FROM products WHERE product_id = :product_id";
@@ -196,7 +196,8 @@ unset($pdo);
                             <label>Product Updated Date</label>
                             <input type="date" name="product_updated_date" class="form-control <?php echo (!empty($Pupdated_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_updated_date; ?>">
                             <span class="invalid-feedback"><?php echo $Pupdated_err; ?></span>
-                        <input type="hidden" name="id" value="<?php echo $id; ?>"/>
+
+                        <input type="hidden" name="id" value="<?php echo $product_id; ?>"/>
                         <input type="submit" class="btn btn-primary" value="Submit">
                         <a href="../index.php" class="btn btn-secondary ml-2">Cancel</a>
                     </form>
