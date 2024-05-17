@@ -1,21 +1,20 @@
-/* Define a class for the grid */
-.card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    width: 80%;
-    margin: auto;
-}
-
-/* Style for individual cards */
+/* Ensure cards take full width of their container and have the same height */
 .card {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .card-img-top {
     width: 100%;
-    height: auto;
+    height: 200px; /* Set a fixed height for the image */
     object-fit: cover;
 }
 
