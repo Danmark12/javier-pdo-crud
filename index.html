@@ -32,15 +32,9 @@
 
 <div id="productsDisplay" class="container mt-5">
     <div class="row">
-        <div class="col-md-4 mb-4">
-            <div id="product1" class="d-flex flex-column"></div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div id="product2" class="d-flex flex-column"></div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div id="product3" class="d-flex flex-column"></div>
-        </div>
+        <div class="col-md-4 mb-4" id="product1"></div>
+        <div class="col-md-4 mb-4" id="product2"></div>
+        <div class="col-md-4 mb-4" id="product3"></div>
     </div>
 </div>
 
@@ -55,7 +49,7 @@
                 if (data[index]) {
                     const product = data[index];
                     const cardHTML = `
-                        <div class="card flex-fill">
+                        <div class="card">
                             <img class="card-img-top" src="${product.img}" alt="${product.title}">
                             <div class="card-body">
                                 <h5 class="card-title">${product.title}</h5>
