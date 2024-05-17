@@ -1,0 +1,32 @@
+/* Define a class for the grid */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    width: 80%;
+    margin: auto;
+}
+
+/* Style for individual cards */
+.card {
+    width: 100%;
+}
+
+.card-img-top {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Style for the cart */
+#cartContainer {
+    position: fixed;
+    top: 4em;
+    right: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
