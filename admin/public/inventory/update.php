@@ -1,6 +1,6 @@
 <?php
 // Include config file
-require_once "../db/config.php";
+require_once "../admin/db/config.php";
  
 // Define variables and initialize with empty values
 $product_id = $product_thumbnail_link = $product_name = $product_description = $product_retail_price = $product_date_added = $product_updated_date = "";
@@ -74,7 +74,7 @@ $stmt->bindParam(":product_updated_date", $product_updated_date);
           // Attempt to execute the prepared statement
           if($stmt->execute()){
             // Records updated successfully. Redirect to landing page
-            header("location: ../public/welcome.php");
+            header("location: ../admin/public/user/welcome.php");
             exit();
         } else{
             echo "Oops! Something went wrong. Please try again later.";
@@ -118,7 +118,7 @@ unset($pdo);
                     $product_updated_date = $row["product_updated_date"];
                 } else{
                     // URL doesn't contain valid id. Redirect to error page
-                    header("location: public/error.php");
+                    header("location: admin/public/user/error.php");
                     exit();
                 }
                 
@@ -134,7 +134,7 @@ unset($pdo);
         unset($link);
     }  else{
         // URL doesn't contain id parameter. Redirect to error page
-        header("location: public/error.php");
+        header("location: admin/public/user/error.php");
         exit();
     }
 }
@@ -199,7 +199,7 @@ unset($pdo);
 
                         <input type="hidden" name="product_id" value="<?php echo $product_id; ?>"/>
                         <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="../index.php" class="btn btn-secondary ml-2">Cancel</a>
+                        <a href="../admin/index.php" class="btn btn-secondary ml-2">Cancel</a>
                     </form>
                 </div>
             </div>        
