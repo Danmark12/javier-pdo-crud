@@ -2,8 +2,10 @@
 // Process delete operation after confirmation
 if(isset($_POST["product_id"]) && !empty($_POST["product_id"])){
     // Include config file
-    require_once "../admin/db/config.php";
-    
+    // require_once "../admin/db/config.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/it28-eccomerce/admin/db/config.php";
+
+
     // Prepare a delete statement
     $sql = "DELETE FROM products WHERE product_id = :product_id";
     
@@ -17,7 +19,7 @@ if(isset($_POST["product_id"]) && !empty($_POST["product_id"])){
         // Attempt to execute the prepared statement
         if($stmt->execute()){
             // Records deleted successfully. Redirect to landing page
-            header("location: ../public/welcome.php");
+            header("location: ../it28-eccomerce/admin/public/user/welcome.php");
             exit();
         } else{
             echo "Oops! Something went wrong. Please try again later.";
@@ -33,7 +35,7 @@ if(isset($_POST["product_id"]) && !empty($_POST["product_id"])){
     // Check existence of id parameter
     if(empty(trim($_GET["product_id"]))){
         // URL doesn't contain id parameter. Redirect to error page
-        header("location:../admin/public/user/error.php");
+        header("location:../it28-eccomerce/admin/public/user/error.php");
         exit();
     }
 }
@@ -64,7 +66,7 @@ if(isset($_POST["product_id"]) && !empty($_POST["product_id"])){
                             <p>Are you sure you want to delete this employee record?</p>
                             <p>
                                 <input type="submit" value="Yes" class="btn btn-danger">
-                                <a href="../admin/public/user/welcome.php" class="btn btn-secondary ml-2">No</a>
+                                <a href="../it28-eccomerce/admin/public/user/welcome.php" class="btn btn-secondary ml-2">No</a>
                             </p>
                         </div>
                     </form>

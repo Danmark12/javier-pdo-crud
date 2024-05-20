@@ -1,7 +1,7 @@
 <?php
 
 $host = 'localhost';
-$dbname = 'it28-ecommerce';
+$dbname = 'dan_tbl';
 $username = 'root';
 $password = '';
 

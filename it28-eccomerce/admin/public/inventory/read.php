@@ -2,8 +2,8 @@
 // Check existence of id parameter before processing further
 if(isset($_GET["product_id"]) && !empty(trim($_GET["product_id"]))){
     // Include config file
-    require_once "../admin/db/config.php";
-    
+    // require_once "../admin/db/config.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/it28-eccomerce/admin/db/config.php";
     // // Prepare a select statement
     // $sql = "SELECT * FROM employees WHERE id = :id";
     $sql = "SELECT * FROM products WHERE product_id = :product_id";
@@ -32,7 +32,7 @@ if(isset($_GET["product_id"]) && !empty(trim($_GET["product_id"]))){
 
             } else{
                 // URL doesn't contain valid id parameter. Redirect to error page
-                header("location: admin/public/user/error.php");
+                header("location: it28-eccomerce/admin/public/user/error.php");
                 exit();
             }
             
@@ -48,7 +48,7 @@ if(isset($_GET["product_id"]) && !empty(trim($_GET["product_id"]))){
     unset($pdo);
 } else{
     // URL doesn't contain id parameter. Redirect to error page
-    header("location: ./admin/public/user/error.php");
+    header("location: ./it28-eccomerce/admin/public/user/error.php");
     exit();
 }
 ?>
@@ -84,7 +84,7 @@ if(isset($_GET["product_id"]) && !empty(trim($_GET["product_id"]))){
                         <label>Sproduct_retail_price</label>
                         <p><b><?php echo $row["product_retail_price"]; ?></b></p>
                     </div>
-                    <p><a href="../admin/index.php" class="btn btn-primary">Back</a></p>
+                    <p><a href="../it28-eccomerce/admin/index.php" class="btn btn-primary">Back</a></p>
                 </div>
             </div>        
         </div>
