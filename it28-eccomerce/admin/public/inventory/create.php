@@ -145,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback"><?php echo $img_err; ?></span>
                     </div>
                     <input type="submit" class="btn btn-primary" value="Submit">
-                    <a href="../products.php" class="btn btn-secondary ml-2">Cancel</a>
+                    <a href="../it28-eccomerce/admin/public/user/welcome.php" class="btn btn-secondary ml-2">Cancel</a>
                 </form>
             </div>
         </div>
