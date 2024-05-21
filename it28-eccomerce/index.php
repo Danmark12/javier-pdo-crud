@@ -58,37 +58,6 @@
 <script>
     let cart = {};
 
-    function purchase() {
-    fetch('./purchase.php', {
-        method: 'POST',
-        body: JSON.stringify({ action: 'purchase', cart: cart }), // Include the cart data in the request body
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            alert(data.message); // Display success message
-            // Optionally, you can redirect the user to a thank you page or perform other actions
-        } else {
-            alert('Purchase failed: ' + data.message); // Display error message
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while processing your purchase');
-    });
-}
-
-
-
-
-
-
-
-
-
     function addToCartAndShow(productId) {
         addToCart(productId);
         displayShowCard(); // Call the function to display the show card
