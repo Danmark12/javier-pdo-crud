@@ -40,6 +40,112 @@
 
 <div id="cartContainer"></div>
 
+<div id="showCard" class="container mt-5" style="display: none;">
+    <div class="card">
+        <div class="card-header">
+            Shopping Cart
+        </div>
+        <div class="card-body" id="cartItems">
+            <!-- Cart items will be displayed here -->
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" onclick="purchase()">Purchase</button>
+            <button class="btn btn-secondary" onclick="cancel()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let cart = {};
+
+    function purchase() {
+    fetch('./purchase.php', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'purchase', cart: cart }), // Include the cart data in the request body
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message); // Display success message
+            // Optionally, you can redirect the user to a thank you page or perform other actions
+        } else {
+            alert('Purchase failed: ' + data.message); // Display error message
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while processing your purchase');
+    });
+}
+
+
+
+
+
+
+
+
+
+    function addToCartAndShow(productId) {
+        addToCart(productId);
+        displayShowCard(); // Call the function to display the show card
+    }
+
+    function addToCart(productId) {
+        if (cart[productId]) {
+            cart[productId]++;
+        } else {
+            cart[productId] = 1;
+        }
+        displayCart();
+    }
+
+    function displayCart() {
+        const cartItems = document.getElementById('cartItems');
+        let showCardHTML = '<h3>Shopping Cart</h3>';
+        for (const [productId, quantity] of Object.entries(cart)) {
+            showCardHTML += `<p>Product ID: ${productId}, Quantity: ${quantity}</p>`;
+        }
+        cartItems.innerHTML = showCardHTML;
+    }
+
+    function displayShowCard() {
+        const showCard = document.getElementById('showCard');
+        showCard.style.display = 'block';
+    }
+
+    function purchase() {
+        fetch('./purchase.php', {
+            method: 'POST',
+            body: JSON.stringify({ action: 'purchase' }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message); // Display success message
+                // Optionally, you can redirect the user to a thank you page or perform other actions
+            } else {
+                alert('Purchase failed: ' + data.message); // Display error message
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while processing your purchase');
+        });
+    }
+
+    function cancel() {
+        // Logic for cancel action
+        alert('Cancel action triggered!');
+    }
+</script>
+
 <script>
     fetch('./products/products-api.php')
         .then(response => response.json())
@@ -56,7 +162,7 @@
                                 <p class="card-text">Price: ₱${product.rrp}</p>
                                 <p class="card-text">${product.description}</p>
                                 <p class="card-text">Quantity: ${product.quantity}</p>
-                                <button class="btn btn-success" onclick="addToCart(${product.id})">
+                                <button class="btn btn-success" onclick="addToCartAndShow(${product.id})">
                                     <i class="fas fa-cart-plus"></i> Add to Cart
                                 </button>
                             </div>
@@ -67,26 +173,6 @@
             });
         })
         .catch(error => console.error('Error:', error));
-
-    let cart = {};
-
-    function addToCart(productId) {
-        if (cart[productId]) {
-            cart[productId]++;
-        } else {
-            cart[productId] = 1;
-        }
-        displayCart();
-    }
-
-    function displayCart() {
-        const cartContainer = document.getElementById('cartContainer');
-        let cartHTML = '<h3>Cart</h3>';
-        for (const [productId, quantity] of Object.entries(cart)) {
-            cartHTML += `<p>Product ID: ${productId}, Quantity: ${quantity}</p>`;
-        }
-        cartContainer.innerHTML = cartHTML;
-    }
 </script>
 </body>
 </html>
