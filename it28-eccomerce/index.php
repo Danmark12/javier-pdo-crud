@@ -58,16 +58,21 @@
 <script>
     let cart = {};
 
-    function addToCartAndShow(productId) {
-        addToCart(productId);
+    function addToCartAndShow(productId, price) {
+        addToCart(productId, price);
         displayShowCard(); // Call the function to display the show card
     }
 
-    function addToCart(productId) {
+    function addToCart(productId, price) {
         if (cart[productId]) {
-            cart[productId]++;
+            cart[productId].quantity++;
+            cart[productId].totalPrice = cart[productId].quantity * price;
         } else {
-            cart[productId] = 1;
+            cart[productId] = {
+                quantity: 1,
+                price: price,
+                totalPrice: price
+            };
         }
         displayCart();
     }
@@ -75,9 +80,12 @@
     function displayCart() {
         const cartItems = document.getElementById('cartItems');
         let showCardHTML = '<h3>Shopping Cart</h3>';
-        for (const [productId, quantity] of Object.entries(cart)) {
-            showCardHTML += `<p>Product ID: ${productId}, Quantity: ${quantity}</p>`;
+        let totalAmount = 0;
+        for (const [productId, item] of Object.entries(cart)) {
+            showCardHTML += `<p>Product ID: ${productId}, Quantity: ${item.quantity}, Price: ₱${item.price}, Total Price: ₱${item.totalPrice}</p>`;
+            totalAmount += item.totalPrice;
         }
+        showCardHTML += `<p>Total Amount: ₱${totalAmount}</p>`;
         cartItems.innerHTML = showCardHTML;
     }
 
@@ -87,26 +95,11 @@
     }
 
     function purchase() {
-        fetch('./purchase.php', {
-            method: 'POST',
-            body: JSON.stringify({ action: 'purchase' }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert(data.message); // Display success message
-                // Optionally, you can redirect the user to a thank you page or perform other actions
-            } else {
-                alert('Purchase failed: ' + data.message); // Display error message
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while processing your purchase');
-        });
+        // Store the cart items in local storage
+        localStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Redirect to payment.php
+        window.location.href = 'products/payment.php';
     }
 
     function cancel() {
@@ -131,7 +124,7 @@
                                 <p class="card-text">Price: ₱${product.rrp}</p>
                                 <p class="card-text">${product.description}</p>
                                 <p class="card-text">Quantity: ${product.quantity}</p>
-                                <button class="btn btn-success" onclick="addToCartAndShow(${product.id})">
+                                <button class="btn btn-success" onclick="addToCartAndShow(${product.id}, ${product.rrp})">
                                     <i class="fas fa-cart-plus"></i> Add to Cart
                                 </button>
                             </div>
@@ -143,5 +136,6 @@
         })
         .catch(error => console.error('Error:', error));
 </script>
+
 </body>
 </html>
