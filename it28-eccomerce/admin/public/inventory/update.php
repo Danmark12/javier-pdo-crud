@@ -1,151 +1,146 @@
 <?php
 // Include config file
-// require_once "../admin/db/config.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/it28-eccomerce/admin/db/config.php";
+require_once "../../db/config.php";
 
+ 
 // Define variables and initialize with empty values
-$product_id = $product_thumbnail_link = $product_name = $product_description = $product_retail_price = $product_date_added = $product_updated_date = "";
-$Pname_err = $Pdescription_err = $Pprice_err = "";
+$title = $description = $price = $rrp = $quantity = $img = "";
+$title_err = $description_err = $price_err = $rrp_err = $quantity_err = $img_err = "";
+   // Prepare a select statement
+   $sql = "SELECT * FROM products WHERE id = :id";
+    
+   if($stmt = $pdo->prepare($sql)){
+       // Bind variables to the prepared statement as parameters
+       $stmt->bindParam(":id", $param_id);
+       
+       // Set parameters
+       $param_id = trim($_GET["id"]);
+       
+       // Attempt to execute the prepared statement
+       if($stmt->execute()){
+           if($stmt->rowCount() == 1){
+               /* Fetch result row as an associative array. Since the result set
+               contains only one row, we don't need to use while loop */
+               $row = $stmt->fetch(PDO::FETCH_ASSOC);
+           
+               // Retrieve individual field values
+               $title = $row["title"];
+               $description = $row["description"];
+               $price = $row["price"];
+               $rrp = $row["rrp"];
+               $quantity = $row["quantity"];
+               $img = $row["img"];
+           } else{
+               // Product ID not found, redirect to error page
+               header("location: ../public/error.php");
+               exit();
+           }
+       } else{
+           echo "Oops! Something went wrong. Please try again later.";
+       }
+   }
+   
  
 // Processing form data when form is submitted
- if(isset($_POST["product_id"]) && !empty($_POST["product_id"])){
-        // Get hidden input value
-        $product_id = $_POST["product_id"];
-    
-    // Validate name
-    $input_product_name = trim($_POST["product_name"]);
-    if (empty($input_product_name)) {
-        $Pname_err = "Please enter a product name.";
-    } elseif (!preg_match("/^[a-zA-Z\s]+$/", $input_product_name)) {
-        $Pname_err = "Please enter a valid name.";
-    } else {
-        $product_name = $input_product_name;
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    // Validate title
+    $input_title = trim($_POST["title"]);
+    if(empty($input_title)){
+        $title_err = "Please enter a title.";
+    } else{
+        $title = $input_title;
     }
     
     // Validate description
-    $input_product_description = trim($_POST["product_description"]);
-    if (empty($input_product_description)) {
-        $Pdescription_err = "Please enter a product description.";     
-    } else {
-        $product_description = $input_product_description;
+    $input_description = trim($_POST["description"]);
+    if(empty($input_description)){
+        $description_err = "Please enter a description.";     
+    } else{
+        $description = $input_description;
     }
     
-    // Validate retail_price
-    $input_product_retail_price = trim($_POST["product_retail_price"]);
-    if (empty($input_product_retail_price)) {
-        $Pprice_err = "Please enter the retail price amount.";     
-    } elseif (!ctype_digit($input_product_retail_price)) {
-        $Pprice_err = "Please enter a positive integer value.";
-    } else {
-        $product_retail_price = $input_product_retail_price;
+    // Validate price
+    $input_price = trim($_POST["price"]);
+    if(empty($input_price)){
+        $price_err = "Please enter the price amount.";     
+    } elseif(!ctype_digit($input_price)){
+        $price_err = "Please enter a positive integer value.";
+    } else{
+        $price = $input_price;
+    }
+
+    // Validate rrp
+    $input_rrp = trim($_POST["rrp"]);
+    if(empty($input_rrp)){
+        $rrp_err = "Please enter the RRP amount.";     
+    } elseif(!ctype_digit($input_rrp)){
+        $rrp_err = "Please enter a positive integer value.";
+    } else{
+        $rrp = $input_rrp;
     }
     
-    // Check input errors before inserting in database
-    if (empty($Pname_err) && empty($Pdescription_err) && empty($Pprice_err)) {
-       // Prepare an update statement
-$sql = "UPDATE products 
-SET product_thumbnail_link=:product_thumbnail_link,
-    product_name=:product_name,
-    product_description=:product_description,
-    product_retail_price=:product_retail_price, 
-    product_date_added=:product_date_added, 
-    product_updated_date=:product_updated_date
-WHERE product_id=:product_id";
+    // Validate quantity
+    $input_quantity = trim($_POST["quantity"]);
+    if(empty($input_quantity)){
+        $quantity_err = "Please enter the quantity.";     
+    } elseif(!ctype_digit($input_quantity)){
+        $quantity_err = "Please enter a positive integer value.";
+    } else{
+        $quantity = $input_quantity;
+    }
+    
+    // Validate image
+    $input_img = trim($_POST["img"]);
+    if(empty($input_img)){
+        $img_err = "Please enter the image URL.";     
+    } else{
+        $img = $input_img;
+    }
+    
+   // Check input errors before updating in database
+    if (empty($title_err) && empty($description_err) && empty($price_err) && empty($rrp_err) && empty($quantity_err) && empty($img_err)) {
+    // Prepare an update statement
+    $sql = "UPDATE products SET title = :title, description = :description, price = :price, rrp = :rrp, quantity = :quantity, img = :img WHERE id = :id";
 
-if ($stmt = $pdo->prepare($sql)) {
-// Bind variables to the prepared statement as parameters
-$stmt->bindParam(":product_id", $product_id);
-$stmt->bindParam(":product_thumbnail_link", $product_thumbnail_link);
-$stmt->bindParam(":product_name", $product_name);
-$stmt->bindParam(":product_description", $product_description);
-$stmt->bindParam(":product_retail_price", $product_retail_price);
-$stmt->bindParam(":product_date_added", $product_date_added);
-$stmt->bindParam(":product_updated_date", $product_updated_date);
+    if ($stmt = $pdo->prepare($sql)) {
+        // Bind variables to the prepared statement as parameters
+        $stmt->bindParam(":title", $title);
+        $stmt->bindParam(":description", $description);
+        $stmt->bindParam(":price", $price);
+        $stmt->bindParam(":rrp", $rrp);
+        $stmt->bindParam(":quantity", $quantity);
+        $stmt->bindParam(":img", $img);
+        $stmt->bindParam(":id", $id); // Add parameter for the product ID
 
-        
-        // Set parameters
-        $param_product_id = $product_id;
-        $param_product_thumbnail_link = $product_thumbnail_link;
-        $param_product_name = $product_name;
-        $param_product_description = $product_description;
-        $param_product_retail_price = $product_retail_price;
-        $param_product_date_added = $product_date_added;
-        $param_product_updated_date = $product_updated_date;
-            
-          // Attempt to execute the prepared statement
-          if($stmt->execute()){
+        // Set the product ID
+        $id = $_POST["id"]; // Assuming you have a hidden input field named "id" in your form
+
+        // Attempt to execute the prepared statement
+        if ($stmt->execute()) {
             // Records updated successfully. Redirect to landing page
-            header("location: ../it28-eccomerce/admin/public/user/welcome.php");
+            header("location: ../user/welcome.php");
             exit();
-        } else{
+        } else {
             echo "Oops! Something went wrong. Please try again later.";
         }
     }
-     
+
     // Close statement
     unset($stmt);
+    }
+
+    
+    // Close connection
+    unset($pdo);
 }
 
-// Close connection
-unset($pdo);
-} else{
-      // Check existence of id parameter before processing further
-      if(isset($_GET["product_id"]) && !empty(trim($_GET["product_id"]))){
-        // Get URL parameter
-        $product_id =  trim($_GET["product_id"]);
-        
-        // Prepare a select statement
-        $sql = "SELECT * FROM products WHERE product_id = :product_id";
-        if($stmt = $pdo->prepare($sql)){
-            // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":product_id", $param_product_id);
-            
-            // Set parameters
-            $param_product_id= $product_id;
-            
-           // Attempt to execute the prepared statement
-           if($stmt->execute()){
-            if($stmt->rowCount() == 1){
-                /* Fetch result row as an associative array. Since the result set
-                contains only one row, we don't need to use while loop */
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                    
-                    // Retrieve individual field value
-                    $product_thumbnail_link = $row["product_thumbnail_link"];
-                    $product_name = $row["product_name"];
-                    $product_description = $row["product_description"];
-                    $product_retail_price = $row["product_retail_price"];
-                    $product_date_added = $row["product_date_added"];
-                    $product_updated_date = $row["product_updated_date"];
-                } else{
-                    // URL doesn't contain valid id. Redirect to error page
-                    header("location: admin/public/user/error.php");
-                    exit();
-                }
-                
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-        }
-        
-        // Close statement
-        unset($stmt);
-        
-        // Close connection
-        unset($link);
-    }  else{
-        // URL doesn't contain id parameter. Redirect to error page
-        header("location: it28-eccomerce/admin/public/user/error.php");
-        exit();
-    }
-}
 ?>
  
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Update Record</title>
+    <title>Create Record</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .wrapper{
@@ -155,56 +150,50 @@ unset($pdo);
     </style>
 </head>
 <body>
-    <div class="wrapper">
+<div class="wrapper">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="mt-5">Update Record</h2>
                     <p>Please edit the input values and submit to update the product record.</p>
                     <form action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" method="post">
-                    <div class="form-group">
-                        <label>Product ID</label>
-                            <input type="text" name="product_id" class="form-control <?php echo (!empty($Pid_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_id; ?>">
-                            <span class="invalid-feedback"><?php echo $Pid_err; ?></span>
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="title" class="form-control <?php echo (!empty($title_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $title; ?>">
+                            <span class="invalid-feedback"><?php echo $title_err;?></span>
                         </div>
                         <div class="form-group">
-                    
-                            <label>Product Thumbnail Link</label>
-                            <input type="text" name= "product_thumbnail_link" class="form-control <?php echo (!empty($Plink_err)) ? 'is-invalid' : ''; ?>" value="<?php echo  $product_thumbnail_link?>">
-                            <span class="invalid-feedback"><?php echo $Plink_err; ?></span>
+                            <label>Description</label>
+                            <textarea name="description" class="form-control <?php echo (!empty($description_err)) ? 'is-invalid' : ''; ?>"><?php echo $description; ?></textarea>
+                            <span class="invalid-feedback"><?php echo $description_err;?></span>
                         </div>
                         <div class="form-group">
-                            <label>Product Name</label>
-                            <input type="text" name="product_name" class="form-control <?php echo (!empty($Pname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_name; ?>">
-                            <span class="invalid-feedback"><?php echo $Pname_err;?></span>
+                            <label>Price</label>
+                            <input type="text" name="price" class="form-control <?php echo (!empty($price_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $price; ?>">
+                            <span class="invalid-feedback"><?php echo $price_err;?></span>
                         </div>
                         <div class="form-group">
-                            <label>Product Description</label>
-                            <textarea name="product_description" class="form-control <?php echo (!empty($Pdescription_err)) ? 'is-invalid' : ''; ?>"><?php echo $product_description; ?></textarea>
-                            <span class="invalid-feedback"><?php echo $Pdescription_err;?></span>
+                            <label>RRP</label>
+                            <input type="text" name="rrp" class="form-control <?php echo (!empty($rrp_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $rrp; ?>">
+                            <span class="invalid-feedback"><?php echo $rrp_err;?></span>
                         </div>
                         <div class="form-group">
-                            <label>Product Retail Price</label>
-                            <input type="text" name="product_retail_price" class="form-control <?php echo (!empty($Pprice_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_retail_price; ?>">
-                            <span class="invalid-feedback"><?php echo $Pprice_err;?></span>
+                            <label>Quantity</label>
+                            <input type="text" name="quantity" class="form-control <?php echo (!empty($quantity_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $quantity; ?>">
+                            <span class="invalid-feedback"><?php echo $quantity_err;?></span>
                         </div>
                         <div class="form-group">
-                            <label>Product Date Added</label>
-                            <input type="date" name="product_date_added" class="form-control <?php echo (!empty($Pdate_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_date_added; ?>">
-                            <span class="invalid-feedback"><?php echo $Pdate_err; ?></span>
+                            <label>Image URL</label>
+                            <input type="text" name="img" class="form-control <?php echo (!empty($img_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $img; ?>">
+                            <span class="invalid-feedback"><?php echo $img_err;?></span>
                         </div>
-                        <div class="form-group">
-                            <label>Product Updated Date</label>
-                            <input type="date" name="product_updated_date" class="form-control <?php echo (!empty($Pupdated_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_updated_date; ?>">
-                            <span class="invalid-feedback"><?php echo $Pupdated_err; ?></span>
-
-                        <input type="hidden" name="product_id" value="<?php echo $product_id; ?>"/>
+                        <input type="hidden" name="id" value="<?php echo $_GET["id"]; ?>"/>
                         <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="../it28-eccomerce/admin/index.php" class="btn btn-secondary ml-2">Cancel</a>
+                        <a href="../../public/user/welcome.php" class="btn btn-secondary ml-2">Cancel</a>
                     </form>
                 </div>
             </div>        
         </div>
-    </div>
+</div>
 </body>
 </html>

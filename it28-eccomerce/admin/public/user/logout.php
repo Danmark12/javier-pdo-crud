@@ -9,6 +9,6 @@ $_SESSION = array();
 session_destroy();
  
 // Redirect to login page
-header("location: ../it28-eccomerce/admin/index.php");
+header("location: ../../index.php");
 exit;
 ?>

@@ -4,7 +4,7 @@ session_start();
  
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: ../index.php");
+    header("location: ../../../admin/index.php");
     exit;
 }
 ?>
@@ -21,7 +21,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
         body{ font: 14px sans-serif; text-align: center; }
-     
         table tr td:last-child{
             width: 120px;
         }
@@ -31,7 +30,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <a class="navbar-brand" href="dashboard.php">Admin</a>
+  <a class="navbar-brand" href="dashboard.php">Macoy</a>
 
   <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -39,14 +38,15 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         <a class="nav-link" href="dashboard.php">Dashboard </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="products.php">Products<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="welcome.php">welcome<span class="sr-only">(current)</span></a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
      <!--<a href="reset-password.php" class="btn btn-warning">Reset Your Password</a>-->
-        <a href="../public/user/logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
+     <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
+
     </form>
   </div>
 </nav>
@@ -58,7 +58,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             <div class="col-md-12">
                 <div class="mt-5 mb-3 clearfix">
                     <h2 class="pull-left">Product Details</h2>
-                    <a href="./inventory/create.php" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Add New Product</a>
+                    <a href="../inventory/create.php" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Add New Product</a>
                 </div>
                 <?php
                 // Include config file
@@ -94,6 +94,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                             <th>Quantity</th>
                                             <th>Image</th>
                                             <th>Date Added</th>
+                                          
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -106,18 +107,19 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                         // Define the row template
                         $rowTemplate = '
                             <tr>
-                                <td>{{id}}</td>
-                                <td>{{title}}</td>
-                                <td>{{description}}</td>
-                                <td>{{price}}</td>
-                                <td>{{rrp}}</td>
-                                <td>{{quantity}}</td>
-                                <td>{{img}}</td>
-                                <td>{{date_added}}</td>
+                                <td>{{p_id}}</td>
+                                <td>{{p_title}}</td>
+                                <td>{{p_description}}</td>
+                                <td>{{p_price}}</td>
+                                <td>{{p_rrp}}</td>
+                                <td>{{p_quantity}}</td>
+                                <td>{{p_img}}</td>
+                                <td>{{p_date_added}}</td>
                                 <td>
-                                    <a href="./inventory/read.php?id={{id}}" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>
-                                    <a href="./inventory/update.php?id={{id}}" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>
-                                    <a href="./inventory/delete.php?id={{id}}" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash"></span></a>
+                                    <a href="../inventory/read.php?id={{p_id}}" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>
+                                    <a href="../inventory/update.php?id={{p_id}}" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>
+                                    <a href="../inventory/delete.php?id={{p_id}}" class="mr-3" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash"></span></a>
+                                
                                 </td>
                             </tr>
                         ';
@@ -126,7 +128,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                         $rows = '';
                         while ($row = $result->fetch()) {
                             $rowHtml = str_replace(
-                                array('{{id}}', '{{title}}', '{{description}}', '{{price}}', '{{rrp}}', '{{quantity}}', '{{img}}', '{{date_added}}'),
+                                array('{{p_id}}', '{{p_title}}', '{{p_description}}', '{{p_price}}', '{{p_rrp}}', '{{p_quantity}}', '{{p_img}}', '{{p_date_added}}'),
                                 array($row['id'], $row['title'], $row['description'], $row['price'], $row['rrp'], $row['quantity'], $row['img'], $row['date_added']),
                                 $rowTemplate
                             );

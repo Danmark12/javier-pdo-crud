@@ -1,6 +1,7 @@
 <?php
 // Include config file
-require_once $_SERVER['DOCUMENT_ROOT'] . "/it28-ecommerce/db/config.php";
+require_once "../../db/config.php";
+
 
 // Define variables and initialize with empty values
 $title = $description = $price = $rrp = $quantity = $img = "";
@@ -77,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Attempt to execute the prepared statement
             if ($stmt->execute()) {
                 // Records created successfully. Redirect to landing page
-                header("location: ../index.php");
+                header("location:  ../user/welcome.php");
                 exit();
             } else {
                 echo "Oops! Something went wrong. Please try again later.";
@@ -145,7 +146,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback"><?php echo $img_err; ?></span>
                     </div>
                     <input type="submit" class="btn btn-primary" value="Submit">
-                    <a href="../it28-eccomerce/admin/public/user/welcome.php" class="btn btn-secondary ml-2">Cancel</a>
+                    <a href="../../public/user/welcome.php" class="btn btn-secondary ml-2">Cancel</a>
+
                 </form>
             </div>
         </div>

@@ -9,17 +9,53 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Inline CSS for styling -->
     <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .navbar-brand img {
+            width: 40px;
+        }
         .payment-container {
-            background-color: #f1f1f1;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
         }
         .payment-details {
             display: none;
         }
         .payment-container .payment-details:first-child {
             display: block;
+        }
+        .form-control {
+            border-radius: 10px;
+        }
+        .btn-primary, .btn-success {
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .btn-primary:hover, .btn-success:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+        .footer {
+            background-color: #f1f1f1;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .footer p {
+            margin: 0;
+            color: #6c757d;
         }
     </style>
 </head>
@@ -71,7 +107,7 @@
         </div>
 
         <!-- Credit Card Payment Details -->
-        <div id="credit_card_details" class="payment-details">
+         <div id="credit_card_details" class="payment-details">
             <h3>Credit Card Details</h3>
             <div class="form-group">
                 <label for="cardholder_name">Cardholder Name</label>
@@ -89,8 +125,10 @@
                 <label for="cvv">CVV</label>
                 <input type="password" class="form-control" id="cvv" name="cvv" maxlength="3" required>
             </div>
-            <button class="btn btn-primary" onclick="confirmAndRedirectToLogistic()">Pay Now</button>
+            <button class="btn btn-primary" onclick="confirmPayment()">Pay Now</button>
         </div>
+    </div>
+
 
         <!-- GCash Payment Details -->
         <div id="gcash_details" class="payment-details" style="display: none;">
@@ -102,7 +140,7 @@
                 <label for="gcash_confirmation_code">Confirmation Code</label>
                 <input type="text" class="form-control" id="gcash_confirmation_code" name="gcash_confirmation_code" required>
             </div>
-            <button class="btn btn-primary" onclick="confirmAndRedirectToLogistic()">Confirm Payment</button>
+            <button class="btn btn-primary" onclick="confirmPayment()">Confirm Payment</button>
         </div>
 
         <!-- PayPal Payment Details -->
@@ -115,7 +153,14 @@
                 <label for="paypal_confirmation_code">Confirmation Code</label>
                 <input type="text" class="form-control" id="paypal_confirmation_code" name="paypal_confirmation_code" required>
             </div>
-            <button class="btn btn-primary" onclick="confirmAndRedirectToLogistic()">Confirm Payment</button>
+            <button class="btn btn-primary" onclick="confirmPayment()">Confirm Payment</button>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success_message" class="payment-details" style="display: none;">
+            <h3>Payment Successful!</h3>
+            <p>Your payment has been processed successfully.</p>
+            <button class="btn btn-primary" onclick="returnToIndex()">Back to Home</button>
         </div>
     </div>
 </div>
@@ -138,11 +183,13 @@
         });
 
         // Show payment details section based on selected payment method
+        document
+        // Show payment details section based on selected payment method
         document.getElementById(`${paymentMethod}_details`).style.display = 'block';
     }
 
-    // Function to confirm payment and redirect to logistic page
-    function confirmAndRedirectToLogistic() {
+    // Function to confirm payment and show success message
+    function confirmPayment() {
         // Get user details
         const userName = document.getElementById('user_name').value;
         const userAddress = document.getElementById('user_address').value;
@@ -193,8 +240,8 @@
         })
         .then(response => {
             if (response.ok) {
-                // Payment successful, redirect to logistic page
-                window.location.href = 'logistic.html';
+                // Payment successful, show success message
+                showSuccessMessage();
             } else {
                 // Payment failed, display error message
                 alert('Payment failed. Please try again.');
@@ -205,74 +252,23 @@
             alert('An error occurred while processing the payment.');
         });
     }
-    // ----------purchase---------
 
+    // Function to show success message
+    function showSuccessMessage() {
+        // Hide all payment details sections
+        const paymentDetails = document.querySelectorAll('.payment-details');
+        paymentDetails.forEach(details => {
+            details.style.display = 'none';
+        });
 
-    // Function to confirm payment and redirect to logistic page
-function confirmAndRedirectToLogistic() {
-    // Get user details
-    const userName = document.getElementById('user_name').value;
-    const userAddress = document.getElementById('user_address').value;
-
-    // Check if user details are provided
-    if (!userName || !userAddress) {
-        alert('Please provide your name and address.');
-        return;
+        // Show success message
+        document.getElementById('success_message').style.display = 'block';
     }
 
-    // Get selected payment method
-    const paymentMethod = document.getElementById('payment_method').value;
-
-    // Get payment data based on selected payment method
-    let paymentData = {
-        userName: userName,
-        userAddress: userAddress,
-        paymentMethod: paymentMethod
-    };
-
-    if (paymentMethod === 'credit_card') {
-        paymentData = {
-            ...paymentData,
-            cardNumber: document.getElementById('card_number').value,
-            cardHolderName: document.getElementById('cardholder_name').value,
-            expiryDate: document.getElementById('expiry_date').value,
-            cvv: document.getElementById('cvv').value
-        };
-    } else if (paymentMethod === 'gcash') {
-        paymentData = {
-            ...paymentData,
-            gcashConfirmationCode: document.getElementById('gcash_confirmation_code').value
-        };
-    } else if (paymentMethod === 'paypal') {
-        paymentData = {
-            ...paymentData,
-            paypalConfirmationCode: document.getElementById('paypal_confirmation_code').value
-        };
+    // Function to return to the index page
+    function returnToIndex() {
+        window.location.href = '../index.php';
     }
-
-    // Send payment data to server for processing
-    fetch('process_payment.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(paymentData)
-    })
-    .then(response => {
-        if (response.ok) {
-            // Payment successful, redirect to logistic page
-            window.location.href = 'logistic.html';
-        } else {
-            // Payment failed, display error message
-            alert('Payment failed. Please try again.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while processing the payment.');
-    });
-}
-
 </script>
 <!-- ------------------------------------------ -->
 </body>
