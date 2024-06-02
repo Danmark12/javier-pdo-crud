@@ -42,7 +42,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         <a class="nav-link" href="dashboard.php">Dashboard <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-      <a class="nav-link" href="../../public/user/welcome.php">welcome</a>
+      <a class="nav-link" href="../../public/user/welcome.php">Products</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">

@@ -1,14 +1,14 @@
 <?php
 // Initialize the session
 session_start();
- 
+
 // Check if the user is logged in, if not then redirect him to login page
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: ../../../admin/index.php");
     exit;
 }
 ?>
- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,32 +27,32 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     </style>
 </head>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <a class="navbar-brand" href="dashboard.php">Macoy</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="dashboard.php">Macoy</a>
 
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item active">
-        <a class="nav-link" href="dashboard.php">Dashboard </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="welcome.php">welcome<span class="sr-only">(current)</span></a>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-     <!--<a href="reset-password.php" class="btn btn-warning">Reset Your Password</a>-->
-     <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="dashboard.php">Dashboard </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="welcome.php">welcome<span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <!--<a href="reset-password.php" class="btn btn-warning">Reset Your Password</a>-->
+            <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
 
-    </form>
-  </div>
+        </form>
+    </div>
 </nav>
 <body>
 
-    <div class="wrapper">
+<div class="wrapper">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -63,47 +63,35 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                 <?php
                 // Include config file
                 require_once '../../db/config.php';
-                
+
                 // Attempt select query execution
                 $sql = "SELECT * FROM products";
-                if($result = $pdo->query($sql)){
+                if ($result = $pdo->query($sql)) {
                     $totalRows = $result->rowCount();
 
-                    if($result->rowCount() > 0){
+                    if ($totalRows > 0) {
                         // Define the table template
                         $tableTemplate = '
-                                <table class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th> <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                        </th>
-                                        <th class="text-center" colspan="8"><h6>Showing ' . $totalRows . ' / ' . $totalRows . ' Records</h6></th>
-
-                                        </tr>
-                                    </thead>                               
-                                </table>
-                              
-                                <table class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Record Number</th>
-                                            <th>Product Name</th>
-                                            <th>Product Description</th>
-                                            <th>Price</th>
-                                            <th>Recommended Retail Price</th>
-                                            <th>Quantity</th>
-                                            <th>Image</th>
-                                            <th>Date Added</th>
-                                          
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{rows}}
-                                    </tbody>
-                                </table>
-                   
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Record Number</th>
+                                        <th>Product Name</th>
+                                        <th>Product Description</th>
+                                        <th>Price</th>
+                                        <th>Recommended Retail Price</th>
+                                        <th>Quantity</th>
+                                        <th>Image</th>
+                                        <th>Date Added</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{rows}}
+                                </tbody>
+                            </table>
                         ';
-                
+
                         // Define the row template
                         $rowTemplate = '
                             <tr>
@@ -119,41 +107,40 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                     <a href="../inventory/read.php?id={{p_id}}" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>
                                     <a href="../inventory/update.php?id={{p_id}}" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>
                                     <a href="../inventory/delete.php?id={{p_id}}" class="mr-3" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash"></span></a>
-                                
                                 </td>
                             </tr>
                         ';
-                
+
                         // Populate the rows using the row template
                         $rows = '';
                         while ($row = $result->fetch()) {
                             $rowHtml = str_replace(
                                 array('{{p_id}}', '{{p_title}}', '{{p_description}}', '{{p_price}}', '{{p_rrp}}', '{{p_quantity}}', '{{p_img}}', '{{p_date_added}}'),
-                                array($row['id'], $row['title'], $row['description'], $row['price'], $row['rrp'], $row['quantity'], $row['img'], $row['date_added']),
+                                array($row['p_id'], $row['p_title'], $row['p_description'], $row['p_price'], $row['p_rrp'], $row['p_quantity'], $row['p_img'], $row['p_date_added']),
                                 $rowTemplate
                             );
                             $rows .= $rowHtml;
                         }
-                
+
                         // Replace the rows placeholder in the table template with the actual rows
                         echo str_replace('{{rows}}', $rows, $tableTemplate);
-                        
+
                         // Free result set
                         unset($result);
-                    } else{
+                    } else {
                         echo '<div class="alert alert-danger"><em>No records were found.</em></div>';
                     }
-                } else{
+                } else {
                     echo "Oops! Something went wrong. Please try again later.";
                 }
-                
+
                 // Close connection
                 unset($pdo);
                 ?>
             </div>
-        </div>        
+        </div>
     </div>
-    </div>
+</div>
 
 </body>
 </html>

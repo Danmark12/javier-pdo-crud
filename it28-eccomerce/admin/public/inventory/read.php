@@ -6,7 +6,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
 
     
     // Prepare a select statement
-    $sql = "SELECT * FROM products WHERE id = :id";
+    $sql = "SELECT * FROM products WHERE p_id = :id";
     
     if($stmt = $pdo->prepare($sql)){
         // Bind variables to the prepared statement as parameters
@@ -22,13 +22,13 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 
                 // Retrieve individual field values
-                $product_name = $row["title"];
-                $product_details = $row["description"];
-                $product_price = $row["price"];
-                $product_rrp = $row["rrp"];
-                $product_quantity = $row["quantity"];
-                $product_img = $row["img"];
-                $date_added = $row["date_added"];
+                $product_name = $row["p_title"];
+                $product_details = $row["p_description"];
+                $product_price = $row["p_price"];
+                $product_rrp = $row["p_rrp"];
+                $product_quantity = $row["p_quantity"];
+                $product_img = $row["p_img"];
+                $date_added = $row["p_date_added"];
             } else{
                 // URL doesn't contain valid id parameter. Redirect to error page
                 header("location: ../public/error.php");

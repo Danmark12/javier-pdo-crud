@@ -2,6 +2,8 @@
 // Include config file
 require_once "../../db/config.php";
 
+// Initialize session
+session_start();
 
 // Define variables and initialize with empty values
 $title = $description = $price = $rrp = $quantity = $img = "";
@@ -61,13 +63,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $img = $input_img;
     }
 
+    // Get the user ID from the session
+    $user_id = $_SESSION["u_id"];
+
     // Check input errors before inserting in database
     if (empty($title_err) && empty($description_err) && empty($price_err) && empty($rrp_err) && empty($quantity_err) && empty($img_err)) {
         // Prepare an insert statement
-        $sql = "INSERT INTO products (title, description, price, rrp, quantity, img) VALUES (:title, :description, :price, :rrp, :quantity, :img)";
+        $sql = "INSERT INTO products (u_id, p_title, p_description, p_price, p_rrp, p_quantity, p_img) VALUES (:u_id, :title, :description, :price, :rrp, :quantity, :img)";
 
         if ($stmt = $pdo->prepare($sql)) {
             // Bind variables to the prepared statement as parameters
+            $stmt->bindParam(":u_id", $user_id);
             $stmt->bindParam(":title", $title);
             $stmt->bindParam(":description", $description);
             $stmt->bindParam(":price", $price);
@@ -147,7 +153,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <input type="submit" class="btn btn-primary" value="Submit">
                     <a href="../../public/user/welcome.php" class="btn btn-secondary ml-2">Cancel</a>
-
                 </form>
             </div>
         </div>

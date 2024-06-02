@@ -1,91 +1,91 @@
 <?php
 // Initialize the session
 session_start();
- 
+
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     header("location: ../admin/public/user/welcome.php");
     exit;
 }
- 
+
 // Include config file
 require_once "../admin/db/config.php";
- 
+
 // Define variables and initialize with empty values
-$username = $password = "";
-$username_err = $password_err = "";
- 
+$u_username = $u_password = "";
+$u_username_err = $u_password_err = "";
+
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
+
     // Check if username is empty
-    if(empty(trim($_POST["username"]))){
-        $username_err = "Please enter username.";
+    if(empty(trim($_POST["u_username"]))){
+        $u_username_err = "Please enter username.";
     } else{
-        $username = trim($_POST["username"]);
+        $u_username = trim($_POST["u_username"]);
     }
-    
+
     // Check if password is empty
-    if(empty(trim($_POST["password"]))){
-        $password_err = "Please enter your password.";
+    if(empty(trim($_POST["u_password"]))){
+        $u_password_err = "Please enter your password.";
     } else{
-        $password = trim($_POST["password"]);
+        $u_password = trim($_POST["u_password"]);
     }
-    
+
     // Validate credentials
-    if(empty($username_err) && empty($password_err)){
+    if(empty($u_username_err) && empty($u_password_err)){
         // Prepare a select statement
-        $sql = "SELECT id, username, password FROM users WHERE username = :username";
-        
+        $sql = "SELECT u_id, u_username, u_password FROM users WHERE u_username = :u_username";
+
         if($stmt = $pdo->prepare($sql)){
             // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
-            
+            $stmt->bindParam(":u_username", $param_username, PDO::PARAM_STR);
+
             // Set parameters
-            $param_username = trim($_POST["username"]);
-            
+            $param_username = $u_username;
+
             // Attempt to execute the prepared statement
             if($stmt->execute()){
                 // Check if username exists, if yes then verify password
                 if($stmt->rowCount() == 1){
                     if($row = $stmt->fetch()){
-                        $id = $row["id"];
-                        $username = $row["username"];
-                        $hashed_password = $row["password"];
-                        if(password_verify($password, $hashed_password)){
+                        $u_id = $row["u_id"];
+                        $u_username = $row["u_username"];
+                        $hashed_password = $row["u_password"];
+                        if(password_verify($u_password, $hashed_password)){
                             // Password is correct, so start a new session
                             session_start();
-                            
+
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
-                            $_SESSION["id"] = $id;
-                            $_SESSION["username"] = $username;                            
-                            
+                            $_SESSION["u_id"] = $u_id;
+                            $_SESSION["u_username"] = $u_username;
+
                             // Redirect user to welcome page
                             header("location: ../admin/public/user/welcome.php");
                         } else{
                             // Display an error message if password is not valid
-                            $password_err = "The password you entered was not valid.";
+                            $u_password_err = "The password you entered was not valid.";
                         }
                     }
                 } else{
                     // Display an error message if username doesn't exist
-                    $username_err = "No account found with that username.";
+                    $u_username_err = "No account found with that username.";
                 }
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
             }
         }
-        
+
         // Close statement
         unset($stmt);
     }
-    
+
     // Close connection
     unset($pdo);
 }
 ?>
- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,21 +102,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <h2>Login</h2>
         <p>Please fill in your credentials to login.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
+            <div class="form-group <?php echo (!empty($u_username_err)) ? 'has-error' : ''; ?>">
                 <label>Username</label>
-                <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
-                <span class="help-block"><?php echo $username_err; ?></span>
-            </div>    
-            <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
+                <input type="text" name="u_username" class="form-control" value="<?php echo $u_username; ?>">
+                <span class="help-block"><?php echo $u_username_err; ?></span>
+            </div>
+            <div class="form-group <?php echo (!empty($u_password_err)) ? 'has-error' : ''; ?>">
                 <label>Password</label>
-                <input type="password" name="password" class="form-control">
-                <span class="help-block"><?php echo $password_err; ?></span>
+                <input type="password" name="u_password" class="form-control">
+                <span class="help-block"><?php echo $u_password_err; ?></span>
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Login">
             </div>
             <p>Don't have an account? <a href="../admin/public/user/register.php">Sign up now</a>.</p>
         </form>
-    </div>    
+    </div>
 </body>
 </html>

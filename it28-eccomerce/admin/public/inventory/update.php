@@ -7,7 +7,7 @@ require_once "../../db/config.php";
 $title = $description = $price = $rrp = $quantity = $img = "";
 $title_err = $description_err = $price_err = $rrp_err = $quantity_err = $img_err = "";
    // Prepare a select statement
-   $sql = "SELECT * FROM products WHERE id = :id";
+   $sql = "SELECT * FROM products WHERE p_id = :id";
     
    if($stmt = $pdo->prepare($sql)){
        // Bind variables to the prepared statement as parameters
@@ -24,12 +24,12 @@ $title_err = $description_err = $price_err = $rrp_err = $quantity_err = $img_err
                $row = $stmt->fetch(PDO::FETCH_ASSOC);
            
                // Retrieve individual field values
-               $title = $row["title"];
-               $description = $row["description"];
-               $price = $row["price"];
-               $rrp = $row["rrp"];
-               $quantity = $row["quantity"];
-               $img = $row["img"];
+               $title = $row["p_title"];
+               $description = $row["p_description"];
+               $price = $row["p_price"];
+               $rrp = $row["p_rrp"];
+               $quantity = $row["p_quantity"];
+               $img = $row["p_img"];
            } else{
                // Product ID not found, redirect to error page
                header("location: ../public/error.php");
@@ -100,7 +100,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
    // Check input errors before updating in database
     if (empty($title_err) && empty($description_err) && empty($price_err) && empty($rrp_err) && empty($quantity_err) && empty($img_err)) {
     // Prepare an update statement
-    $sql = "UPDATE products SET title = :title, description = :description, price = :price, rrp = :rrp, quantity = :quantity, img = :img WHERE id = :id";
+    $sql = "UPDATE products SET p_title = :title, p_description = :description, p_price = :price, p_rrp = :rrp, p_quantity = :quantity, p_img = :img WHERE p_id = :id";
 
     if ($stmt = $pdo->prepare($sql)) {
         // Bind variables to the prepared statement as parameters
@@ -174,26 +174,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
                         <div class="form-group">
                             <label>RRP</label>
-                            <input type="text" name="rrp" class="form-control <?php echo (!empty($rrp_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $rrp; ?>">
-                            <span class="invalid-feedback"><?php echo $rrp_err;?></span>
-                        </div>
-                        <div class="form-group">
-                            <label>Quantity</label>
-                            <input type="text" name="quantity" class="form-control <?php echo (!empty($quantity_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $quantity; ?>">
-                            <span class="invalid-feedback"><?php echo $quantity_err;?></span>
-                        </div>
-                        <div class="form-group">
-                            <label>Image URL</label>
-                            <input type="text" name="img" class="form-control <?php echo (!empty($img_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $img; ?>">
-                            <span class="invalid-feedback"><?php echo $img_err;?></span>
-                        </div>
-                        <input type="hidden" name="id" value="<?php echo $_GET["id"]; ?>"/>
-                        <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="../../public/user/welcome.php" class="btn btn-secondary ml-2">Cancel</a>
-                    </form>
-                </div>
-            </div>        
-        </div>
-</div>
-</body>
-</html>
+                            <input type="text" name="rrp" class="form-control <?php echo (!empty($rrp_err
+                             )) ? 'is-invalid' : ''; ?>" value="<?php echo $rrp; ?>">
+                             <span class="invalid-feedback"><?php echo $rrp_err;?></span>
+                         </div>
+                         <div class="form-group">
+                             <label>Quantity</label>
+                             <input type="text" name="quantity" class="form-control <?php echo (!empty($quantity_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $quantity; ?>">
+                             <span class="invalid-feedback"><?php echo $quantity_err;?></span>
+                         </div>
+                         <div class="form-group">
+                             <label>Image URL</label>
+                             <input type="text" name="img" class="form-control <?php echo (!empty($img_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $img; ?>">
+                             <span class="invalid-feedback"><?php echo $img_err;?></span>
+                         </div>
+                         <input type="hidden" name="id" value="<?php echo $_GET["id"]; ?>"/>
+                         <input type="submit" class="btn btn-primary" value="Submit">
+                         <a href="../../public/user/welcome.php" class="btn btn-secondary ml-2">Cancel</a>
+                     </form>
+                 </div>
+             </div>        
+         </div>
+ </div>
+ </body>
+ </html>
+ 
