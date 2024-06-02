@@ -8,42 +8,44 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
-            background-color: #87CEEB; /* Sky blue background */
-            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ff7e5f, #feb47b); /* Modern gradient background */
+            font-family: 'Arial', sans-serif;
+            color: #333;
         }
         .navbar {
             margin-bottom: 20px;
         }
         .navbar-brand img {
             width: 40px;
-        }
+            margin-right: 10px;
+        } 
         .card {
             transition: transform 0.2s, box-shadow 0.2s;
-            background-color: #ffffff; /* White background for cards */
+            background-color: rgba(255, 255, 255, 0.7); /* Transparent white background for cards */
             border: none; /* No border for cards */
+            border-radius: 10px; /* Rounded corners */
+            overflow: hidden; /* Ensure inner elements are contained within the card */
+            position: relative; /* For adding pseudo-elements */
         }
-        .card:hover {
+        .card:not(.no-design):hover {
             transform: scale(1.05);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
-        .btn-primary, .btn-secondary, .btn-success {
+        .btn {
             transition: background-color 0.2s, color 0.2s;
+            font-size: 1rem;
         }
-        .btn-primary:hover {
+        .btn:not(.no-modernize):hover {
             background-color: #0056b3;
         }
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-        .btn-success:hover {
-            background-color: #218838;
-        }
         .card-header, .card-footer {
-            background-color: #e9ecef;
+            background-color: rgba(233, 236, 239, 0.8);
         }
         .product-card img {
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            max-height: 200px;
+            object-fit: cover; 
         }
         .product-card .card-body {
             text-align: left;
@@ -57,14 +59,10 @@
             font-size: 0.9rem;
             margin-bottom: 15px;
         }
-        .product-card .btn {
-            width: 100%;
-            font-size: 1rem;
-        }
         #homepage {
             padding: 100px 0;
             text-align: center;
-            background: url('https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2') no-repeat center center;
+            background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0') no-repeat center center;
             background-size: cover;
             color: #ffffff;
             position: relative;
@@ -94,14 +92,18 @@
             padding: 10px 30px;
             font-size: 1.2rem;
         }
+        #showCard {
+            display: none;
+            transition: all 0.5s ease;
+        }
     </style>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">
-        <img src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" class="d-inline-block align-top" alt="">
-        Bootstrap
+        <img src="https://img.icons8.com/external-justicon-lineal-color-justicon/344/external-store-online-shopping-justicon-lineal-color-justicon.png" alt="Logo">
+        D-store
     </a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
@@ -114,7 +116,7 @@
         </ul>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <button class="btn btn-outline-success my-2 my-sm-0 no-modernize" type="submit">Search</button>
         </form>
     </div>
 </nav>
@@ -122,20 +124,20 @@
 <div id="homepage">
     <h1>Welcome to Our Store</h1>
     <p>Explore our exclusive range of products</p>
-    <a href="#productsDisplay" class="btn btn-primary">Shop Now</a>
+    <a href="#productsDisplay" class="btn btn-primary no-modernize">Shop Now</a>
 </div>
 
 <div id="productsDisplay" class="container mt-5">
     <div class="row">
-        <div class="col-md-4 mb-4" id="product1"></div>
-        <div class="col-md-4 mb-4" id="product2"></div>
-        <div class="col-md-4 mb-4" id="product3"></div>
+        <div class="col-md-4 mb-4 product-card" id="product1"></div>
+        <div class="col-md-4 mb-4 product-card" id="product2"></div>
+        <div class="col-md-4 mb-4 product-card" id="product3"></div>
     </div>
 </div>
 
 <div id="cartContainer"></div>
 
-<div id="showCard" class="container mt-5" style="display: none;">
+<div id="showCard" class="container mt-5">
     <div class="card">
         <div class="card-header">
             Shopping Cart
@@ -144,8 +146,8 @@
             <!-- Cart items will be displayed here -->
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary" onclick="purchase()">Purchase</button>
-            <button class="btn btn-secondary" onclick="cancel()">Cancel</button>
+            <button class="btn btn-primary no-modernize" onclick="purchase()">Purchase</button>
+            <button class="btn btn-secondary no-modernize" onclick="cancel()">Cancel</button>
         </div>
     </div>
 </div>
@@ -153,20 +155,20 @@
 <script>
     let cart = {};
 
-    function addToCartAndShow(productId, price) {
-        addToCart(productId, price);
+    function addToCartAndShow(p_id, p_price) {
+        addToCart(p_id, p_price);
         displayShowCard(); // Call the function to display the show card
     }
 
-    function addToCart(productId, price) {
-        if (cart[productId]) {
-            cart[productId].quantity++;
-            cart[productId].totalPrice = cart[productId].quantity * price;
+    function addToCart(p_id, p_price) {
+        if (cart[p_id]) {
+            cart[p_id].quantity++;
+            cart[p_id].totalPrice = cart[p_id].quantity * p_price;
         } else {
-            cart[productId] = {
+            cart[p_id] = {
                 quantity: 1,
-                price: price,
-                totalPrice: price
+                price: p_price,
+                totalPrice: p_price
             };
         }
         displayCart();
@@ -176,8 +178,8 @@
         const cartItems = document.getElementById('cartItems');
         let showCardHTML = '<h3>Shopping Cart</h3>';
         let totalAmount = 0;
-        for (const [productId, item] of Object.entries(cart)) {
-            showCardHTML += `<p>Product ID: ${productId}, Quantity: ${item.quantity}, Price: ₱${item.price}, Total Price: ₱${item.totalPrice}</p>`;
+        for (const [p_id, item] of Object.entries(cart)) {
+            showCardHTML += `<p>Product ID: ${p_id}, Quantity: ${item.quantity}, Price: ₱${item.price}, Total Price: ₱${item.totalPrice}</p>`;
             totalAmount += item.totalPrice;
         }
         showCardHTML += `<p>Total Amount: ₱${totalAmount}</p>`;
@@ -193,17 +195,23 @@
         // Store the cart items in local storage
         localStorage.setItem('cart', JSON.stringify(cart));
         
-        // Redirect to payment.php
-        window.location.href = 'products/payment.php';
+        // Get the product IDs from the cart
+        const productIds = Object.keys(cart);
+
+        if (productIds.length > 0) {
+            // Redirect to user_details.php with the first product ID
+            window.location.href = './products/user_details.php?p_id=' + productIds[0];
+        } else {
+            // Handle the case when there are no products in the cart
+            alert('Your cart is empty!');
+        }
     }
 
     function cancel() {
         // Logic for cancel action
         alert('Cancel action triggered!');
     }
-</script>
 
-<script>
     fetch('./products/products-api.php')
         .then(response => response.json())
         .then(data => {
@@ -213,13 +221,12 @@
                     const product = data[index];
                     const cardHTML = `
                         <div class="card product-card">
-                            <img class="card-img-top" src="${product.img}" alt="${product.title}">
+                            <img class="card-img-top" src="${product.p_img}" alt="${product.p_title}">
                             <div class="card-body">
-                                <h5 class="card-title">${product.title}</h5>
-                                <p class="card-text">Price: ₱${product.rrp}</p>
-                                <p class="card-text">${product.description}</p>
-                                <p class="card-text">Quantity: ${product.quantity}</p>
-                                <button class="btn btn-success" onclick="addToCartAndShow(${product.id}, ${product.rrp})">
+                                <h5 class="card-title">${product.p_title}</h5>
+                                <p class="card-text">Price: ₱${product.p_rrp}</p>
+                                <p class="card-text">${product.p_description}</p>
+                                <button class="btn btn-success" onclick="addToCartAndShow(${product.p_id}, ${product.p_rrp})">
                                     <i class="fas fa-cart-plus"></i> Add to Cart
                                 </button>
                             </div>
@@ -234,3 +241,4 @@
 
 </body>
 </html>
+
