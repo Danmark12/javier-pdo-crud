@@ -1,12 +1,17 @@
 <?php
 session_start();
 
-// Enable error reporting
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Database credentials
+// define('DB_SERVER', 'localhost');
+// define('DB_USERNAME', 'u593341949_dev_javier');
+// define('DB_PASSWORD', '20221069Javier');
+// define('DB_NAME', 'u593341949_db_javier');
+
+
 $servername = "localhost";
 $username = "root";
 $password = ""; // Update with your MySQL root password
@@ -19,6 +24,15 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// try{
+//     $pdo = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_NAME, DB_USERNAME, DB_PASSWORD);
+//     // Set the PDO error mode to exception
+//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// } catch(PDOException $e){
+//     die("ERROR: Could not connect. " . $e->getMessage());
+// }
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data

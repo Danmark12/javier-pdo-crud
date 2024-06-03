@@ -1,17 +1,30 @@
 <?php
-// Establish database connection
-$servername = "localhost"; // Change this if your database is hosted elsewhere
-$username = "your_username"; // Replace with your database username
-$password = "your_password"; // Replace with your database password
-$dbname = "dan_tbl"; // Replace with your database name
 
-// Create connection
+$servername = "localhost"; 
+$username = "your_username"; 
+$password = "your_password"; 
+$dbname = "dan_tbl";
+
+// define('DB_SERVER', 'localhost');
+// define('DB_USERNAME', 'u593341949_dev_javier');
+// define('DB_PASSWORD', '20221069Javier');
+// define('DB_NAME', 'u593341949_db_javier');
+
+
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+
+// try{
+//     $pdo = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_NAME, DB_USERNAME, DB_PASSWORD);
+//     // Set the PDO error mode to exception
+//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// } catch(PDOException $e){
+//     die("ERROR: Could not connect. " . $e->getMessage());
+// }
+
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

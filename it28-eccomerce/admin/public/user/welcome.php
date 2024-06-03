@@ -51,7 +51,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     </div>
 </nav>
 <body>
-
 <div class="wrapper">
     <div class="container-fluid">
         <div class="row">

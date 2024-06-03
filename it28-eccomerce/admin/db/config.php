@@ -1,17 +1,17 @@
 <?php
 /* Database credentials. Assuming you are running MySQL
 server with default setting (user 'root' with no password) */
-define('DB_SERVER', 'localhost');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
-define('DB_NAME', 'dan_tbl');
-
-
-
 // define('DB_SERVER', 'localhost');
-// define('DB_USERNAME', 'u593341949_dev_javier');
-// define('DB_PASSWORD', '20221069Javier');
-// define('DB_NAME', 'u593341949_db_javier');
+// define('DB_USERNAME', 'root');
+// define('DB_PASSWORD', '');
+// define('DB_NAME', 'dan_tbl');
+
+
+
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'u593341949_dev_javier');
+define('DB_PASSWORD', '20221069Javier');
+define('DB_NAME', 'u593341949_db_javier');
 
  
 /* Attempt to connect to MySQL database */
